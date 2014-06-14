@@ -6,15 +6,16 @@ Generate FSM, Sequence Diagram, and a set of header files from a short interface
 The "if" language is implemented here in a small Python script.  It generates
 other representations like this state machine (showing multiple interacting APIs):
 
-![Alt State Machine](example.dot.if.png)
-
+![Alt State Machine](example.if.dot.png)
+[Alt State Machine description](example.if.dot)
 And this Sequence Diagram (of which many could be generated):
 
-![Alt Sequence Diagram](example.dot.if.Case1.msc.png)
+![Alt Sequence Diagram](example.if.Case1.msc.png)
+[Alt Sequence Diagram description](example.if.Case1.msc)
 
 From this description:
 
-[An If File](example.dot.if)
+[An If File](example.if)
 
 When dealing with writing code, little attention is currently paid to the fact that each
 API has state, where each function in that API has preconditions that restrict the allowable
