@@ -8,7 +8,8 @@ other representations like this state machine (showing multiple interacting APIs
 
 ![Alt State Machine](example.if.dot.png)
 [Alt State Machine description](example.if.dot)
-And this Sequence Diagram (of which many could be generated):
+And this Sequence Diagram (of which many could be generated, as they are instances
+of whatever the state machines allow):
 
 ![Alt Sequence Diagram](example.if.Case1.msc.png)
 [Alt Sequence Diagram description](example.if.Case1.msc)
