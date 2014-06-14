@@ -21,7 +21,7 @@ From this description:
 
 Which generates these (currently pseudo-Java) headers:
 
-![An Interface Definition](example.if.java)
+[An Interface Definition](example.if.java)
 
 When dealing with writing code, little attention is currently paid to the fact that each
 API has state, where each function in that API has preconditions that restrict the allowable
