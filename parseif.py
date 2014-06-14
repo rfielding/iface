@@ -262,6 +262,11 @@ class IfParser:
                 n = n + 1    
             f.write(");\n")
         f.write("    }\n")
+        f.write("    interface Precondition {\n")
+        for iKey in m.ins:
+            i = m.ins[iKey]
+            f.write("        bool Pre_%s();\n" % i.name )
+        f.write("    }\n")
         f.write("    interface Connect {\n")
         f.write("        bool setListener(%s.%s lsn, bool isOn);\n" % (m.name,"Listen.Move"))
         f.write("        bool setListener(%s.%s lsn, bool isOn);\n" % (m.name,"Listen.Send"))

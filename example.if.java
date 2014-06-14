@@ -6,6 +6,12 @@ public interface ApiA {
         G doSomeG(Y YArg);
         void setB(ApiB ApiBArg);
     }
+    interface Precondition {
+        bool Pre_setZ();
+        bool Pre_doSomeF();
+        bool Pre_doSomeG();
+        bool Pre_setB();
+    }
     interface Connect {
         bool setListener(ApiA.Listen.Move lsn, bool isOn);
         bool setListener(ApiA.Listen.Send lsn, bool isOn);
@@ -46,6 +52,9 @@ public interface ApiB {
     interface In {
         K doSomeK(X XArg);
     }
+    interface Precondition {
+        bool Pre_doSomeK();
+    }
     interface Connect {
         bool setListener(ApiB.Listen.Move lsn, bool isOn);
         bool setListener(ApiB.Listen.Send lsn, bool isOn);
@@ -77,6 +86,8 @@ public interface ApiB {
 public interface ApiC {
     /*ApiC module implements this*/
     interface In {
+    }
+    interface Precondition {
     }
     interface Connect {
         bool setListener(ApiC.Listen.Move lsn, bool isOn);
