@@ -3,6 +3,19 @@ iface
 
 Generate FSM, Sequence Diagram, and a set of header files from a short interface description
 
+The "if" language is implemented here in a small Python script.  It generates
+other representations like this state machine (showing multiple interacting APIs):
+
+![Alt State Machine](example.dot.if.png)
+
+And this Sequence Diagram (of which many could be generated):
+
+![Alt Sequence Diagram](example.dot.if.Case1.msc.png)
+
+From this description:
+
+[An If File](example.dot.if)
+
 When dealing with writing code, little attention is currently paid to the fact that each
 API has state, where each function in that API has preconditions that restrict the allowable
 calling order for the methods in that API.  Having such well defined ordering gives us
@@ -15,6 +28,9 @@ where input must be recognized as being in the language of the API before it wil
 In this view, the correct message ingest of actors must be _decideable_.  APIs are treated
 similar to Communicating Sequential Processes (CSP).  Each instance of an API has state,
 and they exchange messages through their input message queue. 
+
+The script is similar in concept to Ragel, except it is explicitly modelling interactions
+between isolated state machines.  Without this, sequence diagrams cannot be enforced.
 
 The basic rule is to never invoke any function until the preconditions for the invoke are met.
 That means that not only are the input types satisfied, but that preconditions take
@@ -74,3 +90,84 @@ the object.  This is the fullest power available, such that code can be proven l
 consistent.  No attempt to use dependent types is made.  But note that DesignByContract
 provides a weak form of it that has many of the same advantages.
 
+The Language
+============
+
+The "if" language is as simple as it can possibly be from a parsing perspective.
+The language is completely regular, meaning that it can be parsed by a regular expression.
+It does this by avoiding the need to balance nested constructs (begin, end, etc).
+Variable length lists of things are always placed last to keep the grammar regular.
+That means that return values are no optional, and parameters get specified last.
+
+An "if" file is a sequence of modules and interactions, with keywords having an ampersand
+to mark them.
+
+This is a module named ApiA with start state init and final state destroyed.  The
+name is a type name that will end up being the interface name for the module.
+
+* @Module ApiA init destroyed
+
+When a module is being defined, an input message with name, return type, arg types are specified:
+
+* @In doSomeF F X
+* @In doSomeG G Y
+* @In cosine floatFromMinusOneToPlusOne float
+
+The input messages are literally the functions that get invoked on the API.  Almost
+every methodology stops here; which is why state machines and interaction diagrams
+are markerboard-only phenomena that don't survive into the code.  The dual 
+of @In messages is the @Out messages.  With them, we are able to encode how
+modules depend on each other, and are able to literally check interactions for
+overall correctness (such that no module tries to use another modules function
+in a way that violates its preconditions).
+
+It is similar except between the type declaration for the return type and the args,
+in insert the type of the receiver (ie: self):
+
+* @Out doSomeF F ApiA X
+* @Out doSomeG G ApiA Y
+* @Out cosine floatFromMinusOneToPlusOne ApiA float
+
+When one state machine invokes an @Out, the call blocks until the receiver state machine
+transitions on its @In.  This is slightly different from CSP here.  We assume that
+all actors simply consume an input message queue, and one @Out corresponds to one @In.
+@In corresponds to code executing as the state machine transitions from pre to post
+state as it parses input.  @Out corresponds to code executing as the state machine transitions
+from pre to post state as it sends the input.
+
+These @In and @Out functions just represent the messages being sent with no regard for the
+state machines.  The @Move is an instance of a usage of either an @In or an @Out giving
+the specific pre and post states.  Again, because the "if" language is regular, the
+function call is placed last because of its variable length.
+
+This means that there is a transition called "respondForK" that moves from the constructed
+to the responded state, and will invoke bArg's message doSomeK(x) and call the result k.
+
+* @Move respondForK constructed responded Out doSomeK k bArg x
+
+In messages corresond to places where the API blocks and is stuck waiting for input
+from the outside.  Out messages correspond to event handling hooks.  When moving through
+a state machine, these are all distinct concepts with different listeners:
+
+* Exit pre state
+* Move to post state invoking f
+* f is invoked
+* Enter post state
+
+Interactions are an addition to modules that exist to give names to sequences of events
+between actors, and to be able to _check_ that they are possible.  We are here specifying
+the overall correctness of the system.  It would also be here we we would specify state
+transitions to ensure that some sequences put the API into the destroyed state.
+
+TODO
+====
+
+There should be a notion of @Spawn such that the entire system can be specified to
+include the top level program that instantiates the objects and injects their dependencies
+into each other to get them started.  I have done this with some hand created dot files,
+but not accounted for this in the grammar.
+
+This is all conceptually similar to Erlang, which uses tail recursion to specify regular
+state machine changes (and non-tail calls create a sub-state machine).  There, everything
+is communicating state machines, and explicitly modelling spawn dramatically simplifies
+reasoning about how the system is wired together. 
