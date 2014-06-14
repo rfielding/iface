@@ -8,6 +8,7 @@ other representations like this state machine (showing multiple interacting APIs
 
 ![Alt State Machine](example.if.dot.png)
 [Alt State Machine description](example.if.dot)
+
 And this Sequence Diagram (of which many could be generated, as they are instances
 of whatever the state machines allow):
 
@@ -17,6 +18,10 @@ of whatever the state machines allow):
 From this description:
 
 [An If File](example.if)
+
+Which generates these (currently pseudo-Java) headers:
+
+[An Interface Definition](example.if.java)
 
 When dealing with writing code, little attention is currently paid to the fact that each
 API has state, where each function in that API has preconditions that restrict the allowable
