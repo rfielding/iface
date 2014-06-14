@@ -1,0 +1,55 @@
+@Comment
+  this language is regular to make it so that separate implementations
+  are likely to mean the same thing.
+  to be in a state means that preconditions for its In are satisfied.
+  The Out messages document interactions with other modules.
+  For Out messages, the first arg must be a module to recv the message, or
+  else the notification has no specific handling.
+  In fnName retType argType*
+  Out fnName retType recvr argType*
+
+@Module
+  ApiA init destroyed
+  @In doSomeF F X
+  @In doSomeG G Y
+  @In setB void ApiB 
+  @In setZ void ApiB 
+  @Out doSomeK K ApiB X
+  @Out doNotify N ApiA Z
+  @Move constructWithB init constructing In setB b bArg
+  @Move waitForG constructing constructed In doSomeF f x
+  @Move goCrazy constructing wentcrazy In doSomeG g y
+  @Move wasCrazy wentcrazy destroyed Out doNotify n a z
+  @Move moreG constructed constructed In doSomeG g y
+  @Move respondForK constructed responded Out doSomeK k bArg x
+  @Move wrapUp responded destroyed Out doNotify n a z
+
+@Module
+  ApiB init destroyed
+  @In doSomeK K X
+  @Out setB N ApiA ApiB
+  @Out doNotify N ApiA Z
+  @Move initializing init constructed Out setB n b a
+  @Move waitForK constructed constructed In doSomeK k x
+  @Move wrapUp constructed destroyed Out doNotify n b z
+
+@Module
+  ApiC init destroyed
+  @Out doSomeF F ApiA X
+  @Out doSomeG G ApiA Y
+  @Out doNotify N ApiA Z
+  @Move initializing init constructed Out doNotify n
+  @Move emitF constructed constructed Out doSomeF f a x
+  @Move emitG constructed constructed Out doSomeG g a y
+  @Move wrapUp constructed destroyed Out doNotify n c z
+
+@Comment document cases that the state machine allows.  should check out with the state machines.
+@Interaction
+  Case1
+  @Actor a ApiA
+  @Actor b ApiB
+  @Actor c ApiC
+  @Send a sendB b
+  @Send c doSomeF a
+  @Send c doSomeG a
+  @Send b doSomeK a

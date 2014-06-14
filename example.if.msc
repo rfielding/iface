@@ -1,0 +1,7 @@
+msc {
+    a,c,b;
+    a=>b [label="sendB"];
+    c=>a [label="doSomeF"];
+    c=>a [label="doSomeG"];
+    b=>a [label="doSomeK"];
+}
