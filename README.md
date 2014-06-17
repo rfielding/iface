@@ -19,9 +19,6 @@ From this description:
 
 [An If File](example.if)
 
-Which generates these (currently pseudo-Java) headers:
-
-[An Interface Definition](example.if.java)
 
 ```
 
@@ -88,6 +85,15 @@ Which generates these (currently pseudo-Java) headers:
   @Send a doSomeK b
 
 ```
+
+Which generates these (currently pseudo-Java) headers:
+
+[An Interface Definition](example.if.java)
+
+The rendering to headers is something that is still being decided.  Ultimately,
+the goal is to have it be generated such that only legal state transitions
+can be expressed.
+
 
 When dealing with writing code, little attention is currently paid to the fact that each
 API has state, where each function in that API has preconditions that restrict the allowable
