@@ -268,14 +268,16 @@ class IfParser:
             #Render current message, and the state change after send
             f.write("    %s=>%s [label=\"%s\"];\n" % (s.sendFrom, s.sendTo, s.sendMsg))
 
-            senderState = self.nextOnSend( i, s.sendFrom, actorStates[ s.sendFrom ], s.sendMsg )
-            actorStates[ s.sendFrom ] = senderState
-
-            receiverState = self.nextOnRecv( i, s.sendTo,   actorStates[ s.sendTo   ], s.sendMsg )
-            actorStates[ s.sendTo   ] = receiverState
-
-            f.write("    %s box %s [label=\"%s\"];\n" % (s.sendFrom, s.sendFrom, senderState))           
-            f.write("    %s box %s [label=\"%s\"];\n" % (s.sendTo,   s.sendTo,   receiverState))           
+            oldSenderState = actorStates[ s.sendFrom ]
+            senderState = self.nextOnSend( i, s.sendFrom, oldSenderState, s.sendMsg )
+            if oldSenderState != senderState:
+                actorStates[ s.sendFrom ] = senderState
+                f.write("    %s box %s [label=\"%s\"];\n" % (s.sendFrom, s.sendFrom, senderState))           
+            oldReceiverState = actorStates[ s.sendTo ]
+            receiverState = self.nextOnRecv( i, s.sendTo, oldReceiverState, s.sendMsg )
+            if oldReceiverState != receiverState:
+                actorStates[ s.sendTo   ] = receiverState
+                f.write("    %s box %s [label=\"%s\"];\n" % (s.sendTo,   s.sendTo,   receiverState))           
         f.write("}\n")
 
     def mscgenRender(self, fname):

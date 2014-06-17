@@ -5,11 +5,8 @@ msc {
     g box g  [label="init"];
     c=>g [label="doNotify"];
     c box c [label="constructed"];
-    g box g [label="init"];
     c=>a [label="doSomeF"];
-    c box c [label="constructed"];
     a box a [label="constructed"];
     c=>g [label="doNotify"];
     c box c [label="destroyed"];
-    g box g [label="init"];
 }
