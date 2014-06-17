@@ -3,25 +3,11 @@ iface
 
 Generate FSM, Sequence Diagram, and a set of header files from a short interface description
 
-The "if" language is implemented here in a small Python script.  It generates
-other representations like this state machine (showing multiple interacting APIs):
-
-![Alt State Machine](example.if.dot.png)
-[Alt State Machine description](example.if.dot)
-
-And these Sequence Diagram (of which many could be generated, as they are instances
-of whatever the state machines allow):
-
-![Alt Sequence Diagram](example.if.Case1.msc.png)
-[Alt Sequence Diagram 1 description](example.if.Case1.msc)
-
-![Alt Sequence Diagram](example.if.Case2.msc.png)
-[Alt Sequence Diagram 2 description](example.if.Case2.msc)
-
-From this description:
+The "if" language is implemented here in a small Python script.  This simple language
+is a description of a set of communicating state machines.  The raw interface description 
+(explained later on):  
 
 [An If File](example.if)
-
 
 ```
 
@@ -97,6 +83,20 @@ From this description:
   @Send c doNotify g
 
 ```
+
+Generates these communicating state machines:
+
+[Alt State Machine description](example.if.dot)
+![Alt State Machine](example.if.dot.png)
+
+And these Sequence Diagrams (of which many could be generated, as they are instances
+of whatever the state machines allow):
+
+[Alt Sequence Diagram 1 description](example.if.Case1.msc)
+![Alt Sequence Diagram](example.if.Case1.msc.png)
+
+[Alt Sequence Diagram 2 description](example.if.Case2.msc)
+![Alt Sequence Diagram](example.if.Case2.msc.png)
 
 Which generates these (currently pseudo-Java) headers:
 
