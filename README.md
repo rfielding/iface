@@ -166,6 +166,32 @@ API has state, where each function in that API has preconditions that restrict t
 calling order for the methods in that API.  Having such well defined ordering gives us
 what is called a Protocol.  
 
+[Alt File Protocol description](filefsm.dot)
+![Alt File Protocol](filefsm.dot.png)
+
+This says that even though this stateful file API consists of four functions:
+
+* open(filename)
+* read(buffer,len)
+* write(buffer)
+* close()
+
+The order of the API matters because it is stateful.  Implicitly, there are preconditions
+on every function in the API.  These preconditions can be modeled as type state.
+So the preconditions via type state determine all legal calling orders.  The compiler
+should be able to check that a calling order is actually legal.
+
+When there are multiple such state machines involved, they call each other.  Most
+interface definition languages stop at the function being called, and do not state
+who makes the call.  Without this information, it cannot be decided whether sequence
+diagrams are correct usages of the APIs.  Including a sender and explicit receiver
+gives a model similar to CSP or the Actor model.  It is important to note that
+this notation differs from CSP in that the send and receive are asynchronous.  When
+one API calls another, it will simply wait until the other API gets around to consuming
+the message.  In CSP, send and receive must be simultaneous, and result in deadlock
+when a one of the state machines that can handle a message is not in a state where it can
+do so.
+
 When this ordering is exactly defined such that the compiler
 can reject all unforeseen uses, the API has a new layer of _defense_, by denying the attacker
 a space of _undefined states_ for it.  This is very similar to the concept of _LANGSEC_,
