@@ -142,6 +142,24 @@ The rendering to headers is something that is still being decided.  Ultimately,
 the goal is to have it be generated such that only legal state transitions
 can be expressed.
 
+* The reason that preconditions are included is that when every input has
+  a well defined precondition function, we can safely invoke random API methods
+  as long as the preconditions are satisfied.
+
+* Such a random invoker of the API set can be used to test the APIs, even without
+  an implementation beyond precondition checks and state transitions.
+
+* The explicit inclusion of state machine transitions allows the API to really be
+  documented.  In this way, it is even decideable by a machine whether usage is correct,
+  in the sense that the API will not succumb to abuse from its callers.
+
+* With all precondition checks moved out explicitly, and all state transitions explicitly
+  handled with callbacks, all logging at interface boundaries can be moved out to a proxy
+  that implements this interface and forwards to the implementation.  At runtime in production, the
+  proxy might be removed; as normal practice for assertion handling.
+
+Theory
+======
 
 When dealing with writing code, little attention is currently paid to the fact that each
 API has state, where each function in that API has preconditions that restrict the allowable
