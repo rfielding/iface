@@ -13,10 +13,10 @@ And these Sequence Diagram (of which many could be generated, as they are instan
 of whatever the state machines allow):
 
 ![Alt Sequence Diagram](example.if.Case1.msc.png)
-[Alt Sequence Diagram description](example.if.Case1.msc)
+[Alt Sequence Diagram 1 description](example.if.Case1.msc)
 
 ![Alt Sequence Diagram](example.if.Case2.msc.png)
-[Alt Sequence Diagram description](example.if.Case2.msc)
+[Alt Sequence Diagram 2 description](example.if.Case2.msc)
 
 From this description:
 
