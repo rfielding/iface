@@ -285,12 +285,10 @@ class IfParser:
             os.system("mscgen -Tpng -o %s.%s.msc.png %s.msc" % (fname, iKey, fname))
 
     def interfaceRenderFileModule(self, f, m):
-        f.write("public interface %s {\n" % m.name)
-        f.write("    /*%s module implements this*/\n" % m.name)
-        f.write("    interface In {\n")
+        f.write("public interface %s extends Api {\n" % m.name)
         for iKey in m.ins:
             i = m.ins[iKey]
-            f.write("        %s %s(" % (i.ret, i.name))
+            f.write("    %s %s(" % (i.ret, i.name))
             n = 0
             for a in i.args:
                 if n > 0:
@@ -298,58 +296,30 @@ class IfParser:
                 f.write("%s %sArg" % (a,a))
                 n = n + 1    
             f.write(");\n")
-        f.write("    }\n")
-        f.write("    interface Precondition {\n")
         for iKey in m.ins:
             i = m.ins[iKey]
-            f.write("        bool Pre_%s();\n" % i.name )
-        f.write("    }\n")
-        f.write("    interface Connect {\n")
-        f.write("        bool setListener(%s.%s lsn, bool isOn);\n" % (m.name,"Listen.Move"))
-        f.write("        bool setListener(%s.%s lsn, bool isOn);\n" % (m.name,"Listen.Send"))
-        f.write("        bool setListener(%s.%s lsn, bool isOn);\n" % (m.name,"Listen.Enter"))
-        f.write("        bool setListener(%s.%s lsn, bool isOn);\n" % (m.name,"Listen.Exit"))
-        f.write("    }\n")
-        f.write("    /*%s state machine observers implements this*/\n" % m.name)
-        f.write("    interface Listen {\n")
-        f.write("        interface Move {\n")
-        for mv in m.moves:
-            if mv.outAction:
-                f.write("            void Move_%s(" % (mv.name))
-                f.write("%s snd" % (m.name))
-                #nm = mv.outAction.name 
-                #f.write("%s %s" % (m.outs[nm].ret,mv.outAction.ret))
-                #f.write(",%s %s" % (m.outs[nm].recipient,mv.outAction.recipient))
-                #n = 0
-                #for a in mv.outAction.args:
-                #    f.write(",%s %s" % (m.outs[nm].args[n],a))
-                #    n = n + 1
-                f.write(");\n")
-        f.write("        }\n")
-        f.write("        interface Send {\n")
-        for oKey in m.outs:
-            o = m.outs[oKey]
-            f.write("            void Send_%s(" % (o.name))
-            f.write("%s snd" % (m.name))
-            f.write(",%s rcv" % (o.recipient))
+            f.write("    bool Precondition_%s(" % (i.name))
             n = 0
-            for a in o.args:
-                f.write(",%s %sArg" % (a,a))
-                n = n + 1
+            for a in i.args:
+                if n > 0:
+                    f.write(",")
+                f.write("%s %sArg" % (a,a))
+                n = n + 1    
             f.write(");\n")
-        f.write("        }\n")
-        f.write("        interface Enter {\n")
-        for s in m.states:
-            f.write("            void Enter_%s(%s snd);\n" % (s,m.name))
-        f.write("        }\n")
-        f.write("        interface Exit {\n")
-        for s in m.states:
-            f.write("            void Exit_%s(%s snd);\n" % (s,m.name))
-        f.write("        }\n")
-        f.write("    }\n")
         f.write("}\n")
 
     def interfaceRenderFile(self, f):
+        f.write("public interface Api {\n")
+        f.write("    void addListener(Api.Listener lsn);\n")
+        f.write("    interface Listener {\n")
+        f.write("        void stateEnter(String name);\n")
+        f.write("        void stateSend(String name, String exiting, String entering, Api target, String msg, Object[] args);\n")
+        f.write("        void stateSendReturned(String name, String exiting, String entering, Api target, String msg, Object[] args, Object ret);\n")
+        f.write("        void stateRcv(String name, String exiting, String entering, String msg, Object[] args);\n")
+        f.write("        void stateRcvReturn(String name, String exiting, String entering, String msg, Object[] args,Object arg);\n")
+        f.write("        void stateExit(String name);\n")
+        f.write("    }\n")
+        f.write("}\n")
         for mKey in self.modules:
             m = self.modules[mKey]
             self.interfaceRenderFileModule(f, m)        
