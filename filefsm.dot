@@ -1,0 +1,8 @@
+digraph {
+  closed -> opened_read [label="open_read(filename)"]
+  closed -> opened_write [label="open_write(filename)"]
+  opened_read -> opened_read [label="read(buffer,len)"]
+  opened_write -> opened_write [label="write(buffer)"] 
+  opened_read -> closed [label="close()"] 
+  opened_write -> closed [label="close()"] 
+}
