@@ -43,6 +43,7 @@ class IfParserActor:
     def __init__(self, nm):
         self.name = nm
         self.module = None
+        self.startState = None
 
 class IfParserSend:
     def __init__(self):
@@ -163,6 +164,9 @@ class IfParser:
             self.state = "actorType"
         elif self.state=="actorType":
             self.newActor.module = t
+            self.state = "actorState"
+        elif self.state=="actorState":
+            self.newActor.startState = t
             self.state = "wrongState"
         elif self.state=="sendFrom":
             self.newSend = IfParserSend()
@@ -237,6 +241,9 @@ class IfParser:
             f.write(aKey)
             n = n + 1
         f.write(";\n")
+        for aKey in i.actors:
+            a = i.actors[aKey]
+            f.write("    %s box %s  [label=\"%s\"];\n" % (aKey, aKey, a.startState))
         for s in i.sends:
             f.write("    %s=>%s [label=\"%s\"];\n" % (s.sendFrom, s.sendTo, s.sendMsg))           
         f.write("}\n")

@@ -1,3 +1,31 @@
+public interface ApiG {
+    /*ApiG module implements this*/
+    interface In {
+        N doNotify(Z ZArg);
+    }
+    interface Precondition {
+        bool Pre_doNotify();
+    }
+    interface Connect {
+        bool setListener(ApiG.Listen.Move lsn, bool isOn);
+        bool setListener(ApiG.Listen.Send lsn, bool isOn);
+        bool setListener(ApiG.Listen.Enter lsn, bool isOn);
+        bool setListener(ApiG.Listen.Exit lsn, bool isOn);
+    }
+    /*ApiG state machine observers implements this*/
+    interface Listen {
+        interface Move {
+        }
+        interface Send {
+        }
+        interface Enter {
+            void Enter_init(ApiG snd);
+        }
+        interface Exit {
+            void Exit_init(ApiG snd);
+        }
+    }
+}
 public interface ApiA {
     /*ApiA module implements this*/
     interface In {
@@ -26,7 +54,7 @@ public interface ApiA {
             void Move_wrapUp(ApiA snd);
         }
         interface Send {
-            void Send_doNotify(ApiA snd,ApiA rcv,Z ZArg);
+            void Send_doNotify(ApiA snd,ApiG rcv,Z ZArg);
             void Send_doSomeK(ApiA snd,ApiB rcv,X XArg);
         }
         interface Enter {
@@ -68,7 +96,7 @@ public interface ApiB {
             void Move_wrapUp(ApiB snd);
         }
         interface Send {
-            void Send_doNotify(ApiB snd,ApiA rcv,Z ZArg);
+            void Send_doNotify(ApiB snd,ApiG rcv,Z ZArg);
             void Send_setB(ApiB snd,ApiA rcv,ApiB ApiBArg);
         }
         interface Enter {
@@ -104,7 +132,7 @@ public interface ApiC {
             void Move_wrapUp(ApiC snd);
         }
         interface Send {
-            void Send_doNotify(ApiC snd,ApiA rcv,Z ZArg);
+            void Send_doNotify(ApiC snd,ApiG rcv,Z ZArg);
             void Send_doSomeF(ApiC snd,ApiA rcv,X XArg);
             void Send_doSomeG(ApiC snd,ApiA rcv,Y YArg);
         }

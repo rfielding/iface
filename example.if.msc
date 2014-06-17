@@ -1,6 +1,9 @@
 msc {
     a,c,b;
-    a=>b [label="sendB"];
+    a box a  [label="init"];
+    c box c  [label="constructed"];
+    b box b  [label="init"];
+    a=>b [label="setB"];
     c=>a [label="doSomeF"];
     c=>a [label="doSomeG"];
     b=>a [label="doSomeK"];

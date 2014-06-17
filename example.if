@@ -9,47 +9,52 @@
   Out fnName retType recvr argType*
 
 @Module
+  ApiG init destroyed
+  @In doNotify N Z
+  @Move consume init init In doNotify n z
+
+@Module
   ApiA init destroyed
   @In doSomeF F X
   @In doSomeG G Y
   @In setB void ApiB 
   @In setZ void ApiB 
   @Out doSomeK K ApiB X
-  @Out doNotify N ApiA Z
+  @Out doNotify N ApiG Z
   @Move constructWithB init constructing In setB b bArg
   @Move waitForG constructing constructed In doSomeF f x
   @Move goCrazy constructing wentcrazy In doSomeG g y
-  @Move wasCrazy wentcrazy destroyed Out doNotify n a z
+  @Move wasCrazy wentcrazy destroyed Out doNotify n g z
   @Move moreG constructed constructed In doSomeG g y
   @Move respondForK constructed responded Out doSomeK k bArg x
-  @Move wrapUp responded destroyed Out doNotify n a z
+  @Move wrapUp responded destroyed Out doNotify n g z
 
 @Module
   ApiB init destroyed
   @In doSomeK K X
   @Out setB N ApiA ApiB
-  @Out doNotify N ApiA Z
+  @Out doNotify N ApiG Z
   @Move initializing init constructed Out setB n b a
   @Move waitForK constructed constructed In doSomeK k x
-  @Move wrapUp constructed destroyed Out doNotify n b z
+  @Move wrapUp constructed destroyed Out doNotify n g z
 
 @Module
   ApiC init destroyed
   @Out doSomeF F ApiA X
   @Out doSomeG G ApiA Y
-  @Out doNotify N ApiA Z
+  @Out doNotify N ApiG Z
   @Move initializing init constructed Out doNotify n
   @Move emitF constructed constructed Out doSomeF f a x
   @Move emitG constructed constructed Out doSomeG g a y
-  @Move wrapUp constructed destroyed Out doNotify n c z
+  @Move wrapUp constructed destroyed Out doNotify n g z
 
 @Comment document cases that the state machine allows.  should check out with the state machines.
 @Interaction
   Case1
-  @Actor a ApiA
-  @Actor b ApiB
-  @Actor c ApiC
-  @Send a sendB b
+  @Actor a ApiA init
+  @Actor b ApiB init
+  @Actor c ApiC constructed
+  @Send a setB b
   @Send c doSomeF a
   @Send c doSomeG a
   @Send b doSomeK a
