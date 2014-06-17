@@ -161,8 +161,8 @@ can be expressed.
 Theory
 ======
 
-When dealing with writing code, little attention is currently paid to the fact that each
-API has state, where each function in that API has preconditions that restrict the allowable
+When dealing with writing Object Oriented code, little attention is currently paid to the fact that each
+object has state, where each function in that API has preconditions that restrict the allowable
 calling order for the methods in that API.  Having such well defined ordering gives us
 what is called a Protocol.  
 
