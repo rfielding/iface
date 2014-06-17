@@ -300,7 +300,7 @@ class IfParser:
             f.write(");\n")
         for iKey in m.ins:
             i = m.ins[iKey]
-            f.write("    bool Precondition_%s(" % (i.name))
+            f.write("    boolean Precondition_%s(" % (i.name))
             n = 0
             for a in i.args:
                 if n > 0:
