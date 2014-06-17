@@ -193,6 +193,9 @@ the message.  In CSP, send and receive must be simultaneous, and result in deadl
 when a one of the state machines that can handle a message is not in a state where it can
 do so.
 
+Security And Correctness
+========================
+
 When this ordering is exactly defined such that the compiler
 can reject all unforeseen uses, the API has a new layer of _defense_, by denying the attacker
 a space of _undefined states_ for it.  This is very similar to the concept of _LANGSEC_,
