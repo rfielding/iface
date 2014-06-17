@@ -4,7 +4,15 @@ msc {
     c box c  [label="constructed"];
     b box b  [label="init"];
     b=>a [label="setB"];
+    b box b [label="constructed"];
+    a box a [label="constructing"];
     c=>a [label="doSomeF"];
+    c box c [label="constructed"];
+    a box a [label="constructed"];
     c=>a [label="doSomeG"];
+    c box c [label="constructed"];
+    a box a [label="constructed"];
     a=>b [label="doSomeK"];
+    a box a [label="responded"];
+    b box b [label="constructed"];
 }

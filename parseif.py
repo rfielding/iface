@@ -227,6 +227,21 @@ class IfParser:
             self.dotRenderFile(f)
         os.system("dot -Tpng -o %s.dot.png %s.dot" % (fname, fname))
 
+    def getActorModule(self, interaction, actor):
+        return self.modules[ interaction.actors[actor].module ]
+ 
+    def nextOnSend(self, interaction, actor, state, msg):
+        for mv in self.getActorModule(interaction, actor).moves:
+            if state == mv.fromState and mv.outAction and mv.outAction.name == msg:
+                return mv.toState
+        return None
+
+    def nextOnRecv(self, interaction, actor, state, msg):
+        for mv in self.getActorModule(interaction, actor).moves:
+            if state == mv.fromState and mv.inAction and mv.inAction.name == msg:
+                return mv.toState
+        return None
+        
     def mscgenRenderFile(self, f, iKey):
         f.write("msc {\n")
         i = self.interactions[iKey]
@@ -241,11 +256,26 @@ class IfParser:
             f.write(aKey)
             n = n + 1
         f.write(";\n")
+        #Handle the messaging list from the start state of the interaction
+        actorStates = {}
+        #Just list initial actors
         for aKey in i.actors:
             a = i.actors[aKey]
+            actorStates[ aKey ] = a.startState
             f.write("    %s box %s  [label=\"%s\"];\n" % (aKey, aKey, a.startState))
+        #Render message sends and state changes (computed!)
         for s in i.sends:
-            f.write("    %s=>%s [label=\"%s\"];\n" % (s.sendFrom, s.sendTo, s.sendMsg))           
+            #Render current message, and the state change after send
+            f.write("    %s=>%s [label=\"%s\"];\n" % (s.sendFrom, s.sendTo, s.sendMsg))
+
+            senderState = self.nextOnSend( i, s.sendFrom, actorStates[ s.sendFrom ], s.sendMsg )
+            actorStates[ s.sendFrom ] = senderState
+
+            receiverState = self.nextOnRecv( i, s.sendTo,   actorStates[ s.sendTo   ], s.sendMsg )
+            actorStates[ s.sendTo   ] = receiverState
+
+            f.write("    %s box %s [label=\"%s\"];\n" % (s.sendFrom, s.sendFrom, senderState))           
+            f.write("    %s box %s [label=\"%s\"];\n" % (s.sendTo,   s.sendTo,   receiverState))           
         f.write("}\n")
 
     def mscgenRender(self, fname):
