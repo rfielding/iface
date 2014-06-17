@@ -1,5 +1,5 @@
 msc {
-    a,c,b;
+    a [label="a:ApiA"],c [label="c:ApiC"],b [label="b:ApiB"];
     a box a  [label="init"];
     c box c  [label="constructed"];
     b box b  [label="init"];

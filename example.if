@@ -48,7 +48,8 @@
   @Move emitG constructed constructed Out doSomeG g a y
   @Move wrapUp constructed destroyed Out doNotify n g z
 
-@Comment document cases that the state machine allows.  should check out with the state machines.
+@Comment document cases that the state machine allows.
+ The initial state needs to be specified, but it will compute the others.  
 @Interaction
   Case1
   @Actor a ApiA init

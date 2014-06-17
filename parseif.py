@@ -253,7 +253,7 @@ class IfParser:
                 f.write("    ")
             else:
                 f.write(",")
-            f.write(aKey)
+            f.write("%s [label=\"%s:%s\"]" % (aKey, aKey, self.getActorModule(i, aKey).name))
             n = n + 1
         f.write(";\n")
         #Handle the messaging list from the start state of the interaction
