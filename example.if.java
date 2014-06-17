@@ -11,21 +11,21 @@ public interface Api {
 }
 public interface ApiG extends Api {
     N doNotify(Z ZArg);
-    bool Precondition_doNotify(Z ZArg);
+    boolean Precondition_doNotify(Z ZArg);
 }
 public interface ApiA extends Api {
     void setZ(ApiB ApiBArg);
     F doSomeF(X XArg);
     G doSomeG(Y YArg);
     void setB(ApiB ApiBArg);
-    bool Precondition_setZ(ApiB ApiBArg);
-    bool Precondition_doSomeF(X XArg);
-    bool Precondition_doSomeG(Y YArg);
-    bool Precondition_setB(ApiB ApiBArg);
+    boolean Precondition_setZ(ApiB ApiBArg);
+    boolean Precondition_doSomeF(X XArg);
+    boolean Precondition_doSomeG(Y YArg);
+    boolean Precondition_setB(ApiB ApiBArg);
 }
 public interface ApiB extends Api {
     K doSomeK(X XArg);
-    bool Precondition_doSomeK(X XArg);
+    boolean Precondition_doSomeK(X XArg);
 }
 public interface ApiC extends Api {
 }
