@@ -169,9 +169,10 @@ what is called a Protocol.
 [Alt File Protocol description](filefsm.dot)
 ![Alt File Protocol](filefsm.dot.png)
 
-This says that even though this stateful file API consists of four functions:
+This says that even though this stateful file API consists of a few functions:
 
-* open(filename)
+* open_read(filename)
+* open_write(filename)
 * read(buffer,len)
 * write(buffer)
 * close()
