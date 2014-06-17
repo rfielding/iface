@@ -54,7 +54,7 @@
   @Actor a ApiA init
   @Actor b ApiB init
   @Actor c ApiC constructed
-  @Send a setB b
+  @Send b setB a
   @Send c doSomeF a
   @Send c doSomeG a
-  @Send b doSomeK a
+  @Send a doSomeK b

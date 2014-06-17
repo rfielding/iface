@@ -3,8 +3,8 @@ msc {
     a box a  [label="init"];
     c box c  [label="constructed"];
     b box b  [label="init"];
-    a=>b [label="setB"];
+    b=>a [label="setB"];
     c=>a [label="doSomeF"];
     c=>a [label="doSomeG"];
-    b=>a [label="doSomeK"];
+    a=>b [label="doSomeK"];
 }
