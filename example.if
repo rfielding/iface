@@ -59,3 +59,12 @@
   @Send c doSomeF a
   @Send c doSomeG a
   @Send a doSomeK b
+
+@Interaction
+  Case2
+  @Actor g ApiG init
+  @Actor a ApiA constructing
+  @Actor c ApiC init
+  @Send c doNotify g
+  @Send c doSomeF a
+  @Send c doNotify g

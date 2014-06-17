@@ -9,11 +9,14 @@ other representations like this state machine (showing multiple interacting APIs
 ![Alt State Machine](example.if.dot.png)
 [Alt State Machine description](example.if.dot)
 
-And this Sequence Diagram (of which many could be generated, as they are instances
+And these Sequence Diagram (of which many could be generated, as they are instances
 of whatever the state machines allow):
 
 ![Alt Sequence Diagram](example.if.Case1.msc.png)
 [Alt Sequence Diagram description](example.if.Case1.msc)
+
+![Alt Sequence Diagram](example.if.Case2.msc.png)
+[Alt Sequence Diagram description](example.if.Case2.msc)
 
 From this description:
 
@@ -83,6 +86,15 @@ From this description:
   @Send c doSomeF a
   @Send c doSomeG a
   @Send a doSomeK b
+
+@Interaction
+  Case2
+  @Actor g ApiG init
+  @Actor a ApiA constructing
+  @Actor c ApiC init
+  @Send c doNotify g
+  @Send c doSomeF a
+  @Send c doNotify g
 
 ```
 

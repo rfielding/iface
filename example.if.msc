@@ -1,18 +1,15 @@
 msc {
-    a [label="a:ApiA"],c [label="c:ApiC"],b [label="b:ApiB"];
-    a box a  [label="init"];
-    c box c  [label="constructed"];
-    b box b  [label="init"];
-    b=>a [label="setB"];
-    b box b [label="constructed"];
-    a box a [label="constructing"];
+    a [label="a:ApiA"],c [label="c:ApiC"],g [label="g:ApiG"];
+    a box a  [label="constructing"];
+    c box c  [label="init"];
+    g box g  [label="init"];
+    c=>g [label="doNotify"];
+    c box c [label="constructed"];
+    g box g [label="init"];
     c=>a [label="doSomeF"];
     c box c [label="constructed"];
     a box a [label="constructed"];
-    c=>a [label="doSomeG"];
-    c box c [label="constructed"];
-    a box a [label="constructed"];
-    a=>b [label="doSomeK"];
-    a box a [label="responded"];
-    b box b [label="constructed"];
+    c=>g [label="doNotify"];
+    c box c [label="destroyed"];
+    g box g [label="init"];
 }
