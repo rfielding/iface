@@ -23,6 +23,72 @@ Which generates these (currently pseudo-Java) headers:
 
 [An Interface Definition](example.if.java)
 
+```
+
+@Comment
+  this language is regular to make it so that separate implementations
+  are likely to mean the same thing.
+  to be in a state means that preconditions for its In are satisfied.
+  The Out messages document interactions with other modules.
+  For Out messages, the first arg must be a module to recv the message, or
+  else the notification has no specific handling.
+  In fnName retType argType*
+  Out fnName retType recvr argType*
+
+@Module
+  ApiG init destroyed
+  @In doNotify N Z
+  @Move consume init init In doNotify n z
+
+@Module
+  ApiA init destroyed
+  @In doSomeF F X
+  @In doSomeG G Y
+  @In setB void ApiB 
+  @In setZ void ApiB 
+  @Out doSomeK K ApiB X
+  @Out doNotify N ApiG Z
+  @Move constructWithB init constructing In setB b bArg
+  @Move waitForG constructing constructed In doSomeF f x
+  @Move goCrazy constructing wentcrazy In doSomeG g y
+  @Move wasCrazy wentcrazy destroyed Out doNotify n g z
+  @Move moreG constructed constructed In doSomeG g y
+  @Move respondForK constructed responded Out doSomeK k bArg x
+  @Move wrapUp responded destroyed Out doNotify n g z
+
+@Module
+  ApiB init destroyed
+  @In doSomeK K X
+  @Out setB N ApiA ApiB
+  @Out doNotify N ApiG Z
+  @Move initializing init constructed Out setB n b a
+  @Move waitForK constructed constructed In doSomeK k x
+  @Move wrapUp constructed destroyed Out doNotify n g z
+
+@Module
+  ApiC init destroyed
+  @Out doSomeF F ApiA X
+  @Out doSomeG G ApiA Y
+  @Out doNotify N ApiG Z
+  @Move initializing init constructed Out doNotify n
+  @Move emitF constructed constructed Out doSomeF f a x
+  @Move emitG constructed constructed Out doSomeG g a y
+  @Move wrapUp constructed destroyed Out doNotify n g z
+
+@Comment document cases that the state machine allows.
+ The initial state needs to be specified, but it will compute the others.  
+@Interaction
+  Case1
+  @Actor a ApiA init
+  @Actor b ApiB init
+  @Actor c ApiC constructed
+  @Send b setB a
+  @Send c doSomeF a
+  @Send c doSomeG a
+  @Send a doSomeK b
+
+```
+
 When dealing with writing code, little attention is currently paid to the fact that each
 API has state, where each function in that API has preconditions that restrict the allowable
 calling order for the methods in that API.  Having such well defined ordering gives us
