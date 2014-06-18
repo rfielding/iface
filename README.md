@@ -198,7 +198,7 @@ can be expressed.
 As an example of how to test it:
 
 ```java
-void testApiSet(ApiSet apis, Listener logger) {
+void testApiSet(ApiSet apis, Api.Listener logger) {
     //Log all communications that are going to happen
     for(ApiSet api : apis.getApis()) {
       api.addListener(logger);
