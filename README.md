@@ -230,7 +230,7 @@ includes precondition checks and state transitions.
   //The implementation doesn't bother with internal precondition checks
   ApiB bUndefendedImplementation = new ApiBImplementation();
 
-  //This protocol enforcer throws exceptions when attempts are made to violate preconditions
+  //throws exceptions when attempts are made to violate preconditions
   ApiB BProtocolEnforcer = new ApiBEnforcer(bUndefendedImplementation);
 
   //This wrapper logs all activity
