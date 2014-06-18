@@ -95,10 +95,10 @@ Generates these communicating state machines:
 And these Sequence Diagrams (of which many could be generated, as they are instances
 of whatever the state machines allow):
 
-[Alt Sequence Diagram 1 description](example.if.Case1.msc)
+[Case 1](example.if.Case1.msc)
 ![Alt Sequence Diagram](example.if.Case1.msc.png)
 
-[Alt Sequence Diagram 2 description](example.if.Case2.msc)
+[Case 2](example.if.Case2.msc)
 ![Alt Sequence Diagram](example.if.Case2.msc.png)
 
 Which generates these (currently pseudo-Java) headers:
