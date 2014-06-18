@@ -271,11 +271,17 @@ class IfParser:
 
             oldSenderState = actorStates[ s.sendFrom ]
             senderState = self.nextOnSend( i, s.sendFrom, oldSenderState, s.sendMsg )
+            if senderState == None:
+                raise Exception(
+                    "bad send state transition %s %s %s" % (s.senderFrom,oldSenderState,s.sendMsg))    
             if oldSenderState != senderState:
                 actorStates[ s.sendFrom ] = senderState
                 f.write("    %s box %s [label=\"%s\"];\n" % (s.sendFrom, s.sendFrom, senderState))           
             oldReceiverState = actorStates[ s.sendTo ]
             receiverState = self.nextOnRecv( i, s.sendTo, oldReceiverState, s.sendMsg )
+            if receiverState == None:
+                raise Exception(
+                    "bad receive state transition %s %s %s" % (s.senderFrom,oldSenderState,s.sendMsg))    
             if oldReceiverState != receiverState:
                 actorStates[ s.sendTo   ] = receiverState
                 f.write("    %s box %s [label=\"%s\"];\n" % (s.sendTo,   s.sendTo,   receiverState))           
