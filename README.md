@@ -195,6 +195,28 @@ can be expressed.
   that implements this interface and forwards to the implementation.  At runtime in production, the
   proxy might be removed; as normal practice for assertion handling.
 
+As an example of how to test it:
+
+```java
+void testApiSet(ApiSet apis, Listener logger) {
+    //Log all communications that are going to happen
+    for(ApiSet api : apis.getApis()) {
+      api.addListener(logger);
+    } 
+    //Sit in a loop sending arbitrary messages between APIs api1 to api2
+    for(ApiSet api1 : apis.getApis()) {
+        for(ApiSet api2 : apis.getApis()) {
+            for(String msg : api2.messageNames()) {
+                if(api2.doRcv_Precondition(msg, null)) {
+                    api1.doSend(api2, msg, null);
+                }
+            }
+        } 
+    }
+}
+
+```
+
 Theory
 ======
 
