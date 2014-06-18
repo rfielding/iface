@@ -223,6 +223,24 @@ void testApiSet(ApiSet apis, Api.Listener logger) {
 
 ```
 
+Note that all interface related handling can stay in the interface, and this
+includes precondition checks and state transitions.  
+
+```java
+  //The implementation doesn't bother with internal precondition checks
+  ApiB bUndefendedImplementation = new ApiBImplementation();
+
+  //This protocol enforcer throws exceptions when attempts are made to violate preconditions
+  ApiB BProtocolEnforcer = new ApiBEnforcer(bUndefendedImplementation);
+
+  //This wrapper logs all activity
+  ApiB bProtocolLogger = new ApiBProtocolLogger(bProtocolEnforcer);
+
+  //The call is logged, and the raw implementation is defended by the proxy
+  aProtocolLogger.doSend(bProtocolLogger, "doSomeK", null);
+```
+
+
 Theory
 ======
 
