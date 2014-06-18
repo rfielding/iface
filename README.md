@@ -89,6 +89,7 @@ is a description of a set of communicating state machines.  The raw interface de
 
 Generates these communicating state machines:
 
+{{embed}}:example.if.dot
 [Alt State Machine description](example.if.dot)
 ![Alt State Machine](example.if.dot.png)
 
