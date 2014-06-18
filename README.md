@@ -10,10 +10,10 @@ is a description of a set of communicating state machines.  The raw interface de
 [An If File](example.if)
 
 ```
-
 @Comment
   this language is regular to make it so that separate implementations
   are likely to mean the same thing.
+  all tokens are space delimited, with no token restrictions.
   to be in a state means that preconditions for its In are satisfied.
   The Out messages document interactions with other modules.
   For Out messages, the first arg must be a module to recv the message, or
@@ -21,29 +21,32 @@ is a description of a set of communicating state machines.  The raw interface de
   In fnName retType argType*
   Out fnName retType recvr argType*
 
-@Module
-  ApiG init destroyed
+@Comment $apiName $firstState $lastState
+@Module ApiG init destroyed
+  @Comment input message $messageName $returnType $arg1Type
   @In doNotify N Z
+  @Comment move from one state to another: $moveName $preState $postState In $msgName $retVal $arg1
   @Move consume init init In doNotify n z
 
-@Module
-  ApiA init destroyed
+@Comment module is a type, rendered as a class
+@Module ApiA init destroyed
   @In doSomeF F X
   @In doSomeG G Y
   @In setB void ApiB 
   @In setZ void ApiB 
+  @Comment $messageName $returnType $recipientType $arg1Type
   @Out doSomeK K ApiB X
   @Out doNotify N ApiG Z
   @Move constructWithB init constructing In setB b bArg
   @Move waitForG constructing constructed In doSomeF f x
   @Move goCrazy constructing wentcrazy In doSomeG g y
+  @Comment $moveName $preState $postStte Out $messageName $returnVal $recipientVal $arg1Val
   @Move wasCrazy wentcrazy destroyed Out doNotify n g z
   @Move moreG constructed constructed In doSomeG g y
   @Move respondForK constructed responded Out doSomeK k bArg x
   @Move wrapUp responded destroyed Out doNotify n g z
 
-@Module
-  ApiB init destroyed
+@Module ApiB init destroyed
   @In doSomeK K X
   @Out setB N ApiA ApiB
   @Out doNotify N ApiG Z
@@ -51,8 +54,7 @@ is a description of a set of communicating state machines.  The raw interface de
   @Move waitForK constructed constructed In doSomeK k x
   @Move wrapUp constructed destroyed Out doNotify n g z
 
-@Module
-  ApiC init destroyed
+@Module ApiC init destroyed
   @Out doSomeF F ApiA X
   @Out doSomeG G ApiA Y
   @Out doNotify N ApiG Z
@@ -62,19 +64,20 @@ is a description of a set of communicating state machines.  The raw interface de
   @Move wrapUp constructed destroyed Out doNotify n g z
 
 @Comment document cases that the state machine allows.
- The initial state needs to be specified, but it will compute the others.  
-@Interaction
-  Case1
+  The initial state needs to be specified, but the compiler will compute the others.  
+@Comment $interactionName
+@Interaction Case1
+  @Comment $actorName $actorType $actorState
   @Actor a ApiA init
   @Actor b ApiB init
   @Actor c ApiC constructed
+  @Comment $fromActorName $messageName $toActorName
   @Send b setB a
   @Send c doSomeF a
   @Send c doSomeG a
   @Send a doSomeK b
 
-@Interaction
-  Case2
+@Interaction Case2
   @Actor g ApiG init
   @Actor a ApiA constructing
   @Actor c ApiC init

@@ -65,10 +65,13 @@ class IfParser:
         return ' ' == c or '\r' == c or '\n' == c
 
     def emit(self, t):
-        if   t=="@Comment":
-            self.state = "comment"
-        elif   "@"==t[0]:
-            if t=="@Module":
+        #All comments MUST be terminated by an @ keyword token!
+        if self.state == "comment" and not "@"==t[0]:
+            pass
+        elif "@"==t[0]:
+            if  t=="@Comment":
+                self.state = "comment"
+            elif t=="@Module":
                 self.state = "moduleName"
             elif t=="@In":
                 self.state = "inName"
@@ -86,9 +89,8 @@ class IfParser:
                 raise Exception("unknown keyword %s" % t)
         elif self.state=="wrongToken":
             raise Exception("token in wrong state for %s" % t)
-        elif self.state=="comment":
-            pass
         elif self.state=="moduleName":
+            print "created new module"
             self.newModule = IfParserModule(t)
             self.modules[t] = self.newModule
             self.state = "moduleStart"
@@ -102,9 +104,9 @@ class IfParser:
             if not t in self.newModule.ins:
                 self.newIn = IfParserIn(t)
                 self.newModule.ins[t] = self.newIn
+                self.state = "inRet"
             else:
                 raise Exception("redefined input %s" % t)
-            self.state = "inRet"
         elif self.state=="inRet":
             self.newIn.ret = t
             self.state = "inArg"
@@ -114,9 +116,9 @@ class IfParser:
             if not t in self.newModule.outs:
                 self.newOut = IfParserOut(t)
                 self.newModule.outs[t] = self.newOut
+                self.state = "outRet"
             else:
                 raise Exception("redefined output %s" % t)
-            self.state = "outRet"
         elif self.state=="outRet":
             self.newOut.ret = t
             self.state = "outRecipient"
