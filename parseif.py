@@ -90,7 +90,6 @@ class IfParser:
         elif self.state=="wrongToken":
             raise Exception("token in wrong state for %s" % t)
         elif self.state=="moduleName":
-            print "created new module"
             self.newModule = IfParserModule(t)
             self.modules[t] = self.newModule
             self.state = "moduleStart"
@@ -289,6 +288,7 @@ class IfParser:
             os.system("mscgen -Tpng -o %s.%s.msc.png %s.msc" % (fname, iKey, fname))
 
     def interfaceRenderFileModule(self, f, m):
+        f.write("\n")
         f.write("public interface %s extends Api {\n" % m.name)
         for iKey in m.ins:
             i = m.ins[iKey]
@@ -299,7 +299,7 @@ class IfParser:
                     f.write(",")
                 f.write("%s %sArg" % (a,a))
                 n = n + 1    
-            f.write(");\n")
+            f.write(") throws PreconditionException;\n")
         for iKey in m.ins:
             i = m.ins[iKey]
             f.write("    boolean Precondition_%s(" % (i.name))
@@ -313,6 +313,13 @@ class IfParser:
         f.write("}\n")
 
     def interfaceRenderFile(self, f):
+        f.write("\n")
+        f.write("public class PreconditionException extends RuntimeException {\n")
+        f.write("    public PreconditionException(String msg) {\n")
+        f.write("        super(msg);\n")
+        f.write("    }\n")
+        f.write("}\n")
+        f.write("\n")
         f.write("public interface Api {\n")
         f.write("    void addListener(Api.Listener lsn);\n")
         f.write("    interface Listener {\n")

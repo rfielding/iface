@@ -1,3 +1,10 @@
+
+public class PreconditionException extends RuntimeException {
+    public PreconditionException(String msg) {
+        super(msg);
+    }
+}
+
 public interface Api {
     void addListener(Api.Listener lsn);
     interface Listener {
@@ -9,23 +16,27 @@ public interface Api {
         void stateExit(String name);
     }
 }
+
 public interface ApiG extends Api {
-    N doNotify(Z ZArg);
+    N doNotify(Z ZArg) throws PreconditionException;
     boolean Precondition_doNotify(Z ZArg);
 }
+
 public interface ApiA extends Api {
-    void setZ(ApiB ApiBArg);
-    F doSomeF(X XArg);
-    G doSomeG(Y YArg);
-    void setB(ApiB ApiBArg);
+    void setZ(ApiB ApiBArg) throws PreconditionException;
+    F doSomeF(X XArg) throws PreconditionException;
+    G doSomeG(Y YArg) throws PreconditionException;
+    void setB(ApiB ApiBArg) throws PreconditionException;
     boolean Precondition_setZ(ApiB ApiBArg);
     boolean Precondition_doSomeF(X XArg);
     boolean Precondition_doSomeG(Y YArg);
     boolean Precondition_setB(ApiB ApiBArg);
 }
+
 public interface ApiB extends Api {
-    K doSomeK(X XArg);
+    K doSomeK(X XArg) throws PreconditionException;
     boolean Precondition_doSomeK(X XArg);
 }
+
 public interface ApiC extends Api {
 }
