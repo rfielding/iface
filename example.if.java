@@ -9,10 +9,18 @@ public interface Api {
     void addListener(Api.Listener lsn);
     interface Listener {
         void stateEnter(String name);
-        void stateSend(String name, String exiting, String entering, Api target, String msg, Object[] args);
-        void stateSendReturned(String name, String exiting, String entering, Api target, String msg, Object[] args, Object ret);
-        void stateRcv(String name, String exiting, String entering, String msg, Object[] args);
-        void stateRcvReturn(String name, String exiting, String entering, String msg, Object[] args,Object arg);
+        void stateSend(String name, String exiting, String entering,
+                       Api target, String msg, Object[] args
+        );
+        void stateSendReturned(String name, String exiting, String entering,
+                               Api target, String msg, Object[] args, Object ret
+        );
+        void stateRcv(String name, String exiting, String entering,
+                      String msg, Object[] args
+        );
+        void stateRcvReturn(String name, String exiting, String entering,
+                            String msg, Object[] args,Object arg
+        );
         void stateExit(String name);
     }
 }
